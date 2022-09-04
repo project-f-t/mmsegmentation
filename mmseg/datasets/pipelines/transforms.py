@@ -1485,4 +1485,43 @@ class Albu:
         return repr_str
     
     
+@PIPELINES.register_module()
+class Stain:
+  def __init__(self,
+               method="macenko", 
+               sigma1=0.6, 
+               sigma2=0.6, 
+               augment_background=False
+               p = 0.5):
+
+    self.method = method
+    self.sigma1 = sigma1
+    self.sigma2 = sigma2
+    self.augment_background = augment_background
+    self.prob = p
+  
+  def __call__(self, results):
+    stain = True if np.random.rand() < self.prob else False
+    
+    if stain:
+    
+      img = cv2.cvtColor(results["img"], cv2.COLOR_BGR2RGB)
+
+      to_augment = staintools.read_image(img)
+
+      augmentor = staintools.StainAugmentor(method=self.method, 
+                                            sigma1=self.sigma1, 
+                                            sigma2=self.sigma2, 
+                                            augment_background=self.augment_background)
+
+      augmentor.fit(to_augment)
+      augmented_image = augmentor.pop()
+      results["img"] = augmented_image
+
+    return results
+  
+  def __repr__(self):
+    repr_str = self.__class__.__name__+f'(prob={self.prob})'
+    return repr_str
+    
   
