@@ -14,6 +14,11 @@ except ImportError:
     albumentations = None
     Compose = None
 
+try:
+    import staintools
+except ImportError:
+    staintools = None   
+ 
 from ..builder import PIPELINES
 
 
@@ -1493,6 +1498,8 @@ class Stain:
                sigma2=0.6, 
                augment_background=False,
                p = 0.5):
+    if staintools is None:
+            raise RuntimeError('staintools is not installed')
 
     self.method = method
     self.sigma1 = sigma1
@@ -1505,9 +1512,7 @@ class Stain:
     
     if stain:
     
-      img = cv2.cvtColor(results["img"], cv2.COLOR_BGR2RGB)
-
-      to_augment = staintools.read_image(img)
+      to_augment = cv2.cvtColor(results["img"], cv2.COLOR_BGR2RGB)
 
       augmentor = staintools.StainAugmentor(method=self.method, 
                                             sigma1=self.sigma1, 
