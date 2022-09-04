@@ -1491,7 +1491,7 @@ class Stain:
                method="macenko", 
                sigma1=0.6, 
                sigma2=0.6, 
-               augment_background=False
+               augment_background=False,
                p = 0.5):
 
     self.method = method
@@ -1516,6 +1516,8 @@ class Stain:
 
       augmentor.fit(to_augment)
       augmented_image = augmentor.pop()
+      
+      augmented_image = cv2.cvtColor(augmented_image, cv2.COLOR_BGR2RGB)
       results["img"] = augmented_image
 
     return results
