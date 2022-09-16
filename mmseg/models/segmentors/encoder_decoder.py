@@ -257,7 +257,7 @@ class EncoderDecoder(BaseSegmentor):
 
         return output
 
-    def simple_test(self, img, img_meta, rescale=True):
+    def simple_test(self, img, img_meta, rescale=True, **kwargs):
         """Simple test with single image."""
         seg_logit = self.inference(img, img_meta, rescale)
         if self.test_cfg.get('logits',False):
@@ -273,7 +273,7 @@ class EncoderDecoder(BaseSegmentor):
         seg_pred = list(seg_pred)
         return seg_pred
 
-    def aug_test(self, imgs, img_metas, rescale=True):
+    def aug_test(self, imgs, img_metas, rescale=True, **kwargs):
         """Test with augmentations.
 
         Only rescale=True is supported.
