@@ -260,7 +260,7 @@ class EncoderDecoder(BaseSegmentor):
     def simple_test(self, img, img_meta, rescale=True):
         """Simple test with single image."""
         seg_logit = self.inference(img, img_meta, rescale)
-        if test_cfg.get('logits',False):
+        if self.test_cfg.get('logits',False):
             seg_pred = seg_logit
         else:
             seg_pred = seg_logit.argmax(dim=1)
@@ -286,7 +286,7 @@ class EncoderDecoder(BaseSegmentor):
             cur_seg_logit = self.inference(imgs[i], img_metas[i], rescale)
             seg_logit += cur_seg_logit
         seg_logit /= len(imgs)
-        if test_cfg.get('logits', False):
+        if self.test_cfg.get('logits', False):
             seg_pred = seg_logit
         else:
             seg_pred = seg_logit.argmax(dim=1)
